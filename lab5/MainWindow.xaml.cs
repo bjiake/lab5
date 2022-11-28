@@ -23,6 +23,8 @@ using OxyPlot.Wpf;
 using OxyPlot.Axes;
 using System.Linq.Expressions;
 using System.Drawing;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Media3D;
 
 namespace lab5 {
     /// <summary>
@@ -30,72 +32,132 @@ namespace lab5 {
     /// </summary>
     public partial class MainWindow : Window {
         //private PlotModel OxyPlotModel { get; set; }
-        public PlotModel MyModel { get; private set; }
+        public PlotModel MyModel { get; set; }
 
         public MainWindow() {
-            this.MyModel = new PlotModel { Title = "345" };
-
-            this.MyModel.Series.Add(new FunctionSeries(Math.Cos, 0, 10, 0.1, "cos(x)"));
+            this.MyModel = new PlotModel { Title = "График" };
+            MyModel.InvalidatePlot(true);
+            //this.MyModel.Series.Add(new FunctionSeries(Math.Cos, 0, 10, 0.1, "cos(x)"));
             //this.MyModel.InvalidatePlot(true);
         }
 
         private double leftBorder = 0;
         private double rigthBorder = 0;
-        private double accuracy = 0;
+        private double eps = 0;
+        private double number = 0;
+        private double h = 0;
 
         private void btCalculate_Click(object sender, RoutedEventArgs e) {
+            //Проверка пустых значений
             if (tbInput.Text == string.Empty || tbLeftBorder.Text == string.Empty || tbRigthBorder.Text == string.Empty || tbAccuracy.Text == String.Empty) {
                 MessageBox.Show("Пожалуйста, введите данные");
                 return;
             }
+            //чтение данных
             leftBorder = Convert.ToDouble(tbLeftBorder.Text);
             rigthBorder = Convert.ToDouble(tbRigthBorder.Text);
-            accuracy = Convert.ToDouble(tbAccuracy.Text);
+            eps = Convert.ToDouble(tbAccuracy.Text);
+            number = Convert.ToDouble(tbRectangle.Text);
+            h = ( rigthBorder - leftBorder ) / number;
 
-            MyModel.Axes.Clear();
-
-            MyModel.Axes.
-
-            MyModel.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, Minimum = -20, Maximum = 80 });
-            MyModel.Axes.Add(new LinearAxis { Position = AxisPosition.Left, Minimum = -10, Maximum = 10 });
-
+            //График
             MyModel.Series.Add(GetFunction());
+            MyModel.InvalidatePlot(true);
+            PlotModel.Model = MyModel;
 
-            //MyModel.Series.Add(GetFunction());
-           
-
+            //double result = parseIntegral(rigthBorder) - parseIntegral(leftBorder);
+            parseIntegral();
 
             if (cbParabola.IsChecked == true || cbRectangle.IsChecked == true || cbTrapez.IsChecked == true) {
                 if (cbParabola.IsChecked == true) {
+                    double diff = 0;
+                    int i = 1;
+                    do {
+                        i++;
+                        diff = Math.Abs(Parabola(number * i) - Parabola(number * (i + 1)));
+                    } while (diff > eps);
+                    lbParabol.Content = Parabola(i).ToString();
                 }
                 if (cbTrapez.IsChecked == true) {
+                    double diff = 0;
+                    int i = 1;
+                    do {
+                        i++;
+                        diff = Math.Abs(Trapez(number * i) - Trapez(number * ( i + 1 )));
+                    } while (diff > eps);
+
+                    lbTrapez.Content = Trapez(i).ToString();
                 }
                 if (cbRectangle.IsChecked == true) {
+                    double diff = 0;
+                    int i = 1;
+                    do {
+                        i++;
+                        diff = Math.Abs(Rectangle(number * i) - Rectangle(number * ( i + 1 )));
+                    } while (diff > eps);
 
+                    lbRectangle.Content = Rectangle(i).ToString();
                 }
             } else {
                 MessageBox.Show("Пожалуйста, выберите метод(ы)");
                 return;
             }
         }
-        #region парсинг
-        public double getValue(double point) {
-            Argument x = new Argument("x");
-            x.setArgumentValue(point);
-            Expression expression = new Expression(tbInput.Text.ToString(), x);
-            return expression.calculate();
+        #region Методы
+        private double Rectangle(double number) {
+            double result;
+            result = 0;
+
+            for (double i = 1; i < number; i++) {
+                //x = leftBorder + i * h;
+                result += h * parseMath(leftBorder + i * h);
+            }
+
+            return result;
         }
+        private double Trapez(double number) {
+            double result = parseMath(leftBorder) + parseMath(rigthBorder);
+
+            for (double i = 1; i < number - 1; i++) {
+                result += 2 * parseMath(leftBorder + i * h);
+            }
+            result *= h / 2;
+
+            return result;
+        }
+        
+        private double Parabola(double number) {
+            double result = parseMath(leftBorder) + parseMath(rigthBorder);
+            double k;
+
+            for (double i = 1; i < number - 1; i++) {
+                k = 2 + 2 * ( i % 2 );
+                result += k * parseMath(leftBorder + i * h);
+            }
+            result *= h / 3;
+
+            return result;
+        }
+        #endregion
+
+        #region парсинг
         public FunctionSeries GetFunction() {
             double n = Convert.ToDouble(tbRigthBorder.Text);
             FunctionSeries serie = new FunctionSeries();
 
-            for (double x = Convert.ToDouble(tbLeftBorder.Text) ; x < n; x++) {
-                DataPoint data = new DataPoint(x, getValue(x));
+            for (double x = Convert.ToDouble(tbLeftBorder.Text); x < n; x += 0.01) {
+                DataPoint data = new DataPoint(x, parseMath(x));
 
                 serie.Points.Add(data);
             }
-            //returning the serie
             return serie;
+        }
+
+        private double parseIntegral() {
+            //int(expression, argument, from, to)
+            Expression expression = new Expression("int(" + tbInput.Text.ToString() + ", x, " + leftBorder.ToString() + ", " + rigthBorder.ToString() + ")");
+            //MessageBox.Show(expression.calculate().ToString());
+            return expression.calculate();
         }
 
         private double parseMath(double point) {

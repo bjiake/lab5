@@ -7,11 +7,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:lab5"
         mc:Ignorable="d"
-        Title="MainViewModel" Height="493" Width="855">
+        Title="MainViewModel" Height="611" Width="970">
     <Window.DataContext>
         <local:MainWindow/>
     </Window.DataContext>
-    <Grid RenderTransformOrigin="0.5,0.5" Margin="0,0,0,-6">
+    <Grid RenderTransformOrigin="0.5,0.5" Margin="0,0,0,-45">
         <Grid.RenderTransform>
             <TransformGroup>
                 <ScaleTransform/>
@@ -20,17 +20,22 @@
                 <TranslateTransform/>
             </TransformGroup>
         </Grid.RenderTransform>
-        <oxy:PlotView Model="{Binding MyModel}" Margin="0,0,0,173"/>
-        <TextBox x:Name="tbInput" HorizontalAlignment="Left" Margin="206,323,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="203" FontSize="20"/>
-        <Label Content="Введите формулу" HorizontalAlignment="Left" Margin="10,315,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.093,0.328" FontSize="20"/>
-        <Label Content="Границы интервала" HorizontalAlignment="Left" Margin="10,352,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.093,0.328" FontSize="20"/>
-        <TextBox x:Name="tbLeftBorder" HorizontalAlignment="Left" Margin="206,361,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="99" FontSize="20"/>
-        <TextBox x:Name="tbRigthBorder" HorizontalAlignment="Left" Margin="310,361,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="99" FontSize="20"/>
-        <TextBox x:Name="tbAccuracy" HorizontalAlignment="Left" Margin="206,402,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="203" FontSize="20"/>
-        <Label Content="Введите точность" HorizontalAlignment="Left" Margin="10,394,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.093,0.328" FontSize="20"/>
-        <Button x:Name="btCalculate" Content="Вычислить" HorizontalAlignment="Left" Margin="206,436,0,0" VerticalAlignment="Top" Height="29" Width="203" FontSize="20" Click="btCalculate_Click"/>
-        <CheckBox x:Name="cbRectangle" Content="Метод прямоугольников" HorizontalAlignment="Left" Margin="428,323,0,0" VerticalAlignment="Top" FontSize="20" Height="29"/>
-        <CheckBox x:Name="cbTrapez" Content="Метод трапеций" HorizontalAlignment="Left" Margin="428,360,0,0" VerticalAlignment="Top" FontSize="20" Height="29"/>
-        <CheckBox x:Name="cbParabola" Content="Метод парабол" HorizontalAlignment="Left" Margin="428,402,0,0" VerticalAlignment="Top" FontSize="20" Height="29"/>
+        <oxy:PlotView x:Name="PlotModel" Model="{Binding MyModel}" Margin="0,0,0,324"/>
+        <TextBox x:Name="tbInput" HorizontalAlignment="Left" Margin="204,369,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="203" FontSize="20"/>
+        <Label Content="Введите формулу" HorizontalAlignment="Left" Margin="8,361,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.093,0.328" FontSize="20"/>
+        <Label Content="Границы интервала" HorizontalAlignment="Left" Margin="8,398,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.093,0.328" FontSize="20"/>
+        <TextBox x:Name="tbLeftBorder" HorizontalAlignment="Left" Margin="204,407,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="99" FontSize="20"/>
+        <TextBox x:Name="tbRigthBorder" HorizontalAlignment="Left" Margin="308,407,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="99" FontSize="20"/>
+        <TextBox x:Name="tbAccuracy" HorizontalAlignment="Left" Margin="204,448,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="203" FontSize="20"/>
+        <Label Content="Введите точность" HorizontalAlignment="Left" Margin="8,440,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.093,0.328" FontSize="20"/>
+        <Button x:Name="btCalculate" Content="Вычислить" HorizontalAlignment="Left" Margin="204,531,0,0" VerticalAlignment="Top" Height="29" Width="203" FontSize="20" Click="btCalculate_Click"/>
+        <CheckBox x:Name="cbRectangle" Content="Метод прямоугольников" HorizontalAlignment="Left" Margin="426,369,0,0" VerticalAlignment="Top" FontSize="20" Height="29"/>
+        <CheckBox x:Name="cbTrapez" Content="Метод трапеций" HorizontalAlignment="Left" Margin="426,407,0,0" VerticalAlignment="Top" FontSize="20" Height="29"/>
+        <CheckBox x:Name="cbParabola" Content="Метод парабол" HorizontalAlignment="Left" Margin="426,442,0,0" VerticalAlignment="Top" FontSize="20" Height="29"/>
+        <TextBox x:Name="tbRectangle" HorizontalAlignment="Left" Margin="206,482,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="201" FontSize="20" Height="37"/>
+        <Label Content= "Количество прямоуг." HorizontalAlignment="Left" Margin="8,482,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.093,0.328" FontSize="20" Height="44" Width="193"/>
+        <Label x:Name="lbRectangle" Content= "Площадь прямоугольниками" HorizontalAlignment="Left" Margin="680,361,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.093,0.328" FontSize="20" Height="37" Width="281"/>
+        <Label x:Name="lbParabol" Content= "Площадь параболами" HorizontalAlignment="Left" Margin="679,443,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.093,0.328" FontSize="20" Height="38" Width="281"/>
+        <Label x:Name="lbTrapez" Content= "Площадь трапециями" HorizontalAlignment="Left" Margin="680,405,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.093,0.328" FontSize="20" Height="38" Width="281"/>
     </Grid>
 </Window>
